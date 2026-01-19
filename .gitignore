@@ -1,0 +1,39 @@
+backend/__pycache__/
+backend/*.py[cod]
+backend/*$py.class
+backend/.Python
+backend/db.sqlite3
+backend/db.sqlite3-journal
+backend/media/
+backend/staticfiles/
+backend/.env
+backend/.venv
+backend/venv/
+backend/ENV/
+
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ===================================
+# OS
+# ===================================
+.DS_Store
+Thumbs.db
+
+# ===================================
+# Docker
+# ===================================
+.docker/
+*.postgres-data/
+
+# ===================================
+# Secrets
+# ===================================
+*.pem
+*.key
+.env
+.env.*
+!.env.example

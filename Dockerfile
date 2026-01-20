@@ -20,22 +20,12 @@ COPY . .
 # Create staticfiles directory
 RUN mkdir -p staticfiles
 
+# Make start script executable
+COPY start.sh .
+RUN chmod +x start.sh
+
 # Set environment variable
 ENV PYTHONUNBUFFERED=1
 
-# Run with explicit error handling
-CMD set -e && \
-    echo "Starting migrations..." && \
-    python manage.py migrate --noinput && \
-    echo "Collecting static files..." && \
-    python manage.py collectstatic --noinput --clear || echo "Static collection failed, continuing..." && \
-    echo "Starting gunicorn..." && \
-    exec gunicorn config.wsgi:application \
-        --bind 0.0.0.0:$PORT \
-        --workers 2 \
-        --threads 4 \
-        --timeout 120 \
-        --access-logfile - \
-        --error-logfile - \
-        --log-level debug \
-        --capture-output
+# Use start script
+CMD ["./start.sh"]

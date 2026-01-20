@@ -2,14 +2,13 @@ import os
 import dj_database_url
 from .base import *
 
+print("🚀 Loading production settings...")
+
 # Debug
 DEBUG = False
 
 # Secret Key
-SECRET_KEY = os.getenv(
-    'SECRET_KEY',
-    '***REMOVED***'  # Fallback si no está en variables
-)
+SECRET_KEY = os.getenv('SECRET_KEY', '***REMOVED***')
 
 # Allowed Hosts
 ALLOWED_HOSTS = [
@@ -19,14 +18,27 @@ ALLOWED_HOSTS = [
 ]
 
 # Database
+database_url = os.getenv('DATABASE_URL')
+print(f"📊 DATABASE_URL exists: {bool(database_url)}")
+
+if not database_url:
+    raise ValueError("DATABASE_URL environment variable is not set!")
+
 DATABASES = {
     'default': dj_database_url.config(
-        default=os.getenv('DATABASE_URL'),
+        default=database_url,
         conn_max_age=600,
         conn_health_checks=True,
     )
 }
 
+print(f"✅ Database configured: {DATABASES['default']['ENGINE']}")
+
+# CORS - Solo agregar si no está en INSTALLED_APPS
+if 'corsheaders' not in INSTALLED_APPS:
+    INSTALLED_APPS += ['corsheaders']
+
+# CORS debe estar PRIMERO en MIDDLEWARE
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
@@ -69,10 +81,19 @@ CORS_ALLOW_HEADERS = [
     'x-requested-with',
 ]
 
-# Static Files
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+# Static Files - Simplificado y robusto
 STATIC_URL = '/static/'
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# Whitenoise configuration
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 # Security
 CSRF_TRUSTED_ORIGINS = [
@@ -86,20 +107,5 @@ SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-
-# Logging para debug
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-        },
-    },
-    'root': {
-        'handlers': ['console'],
-        'level': 'INFO',
-    },
-}
 
 print("✅ Production settings loaded successfully")

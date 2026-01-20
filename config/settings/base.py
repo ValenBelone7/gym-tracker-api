@@ -135,7 +135,7 @@ REST_FRAMEWORK = {
 # ===================================
 CORS_ALLOWED_ORIGINS = os.getenv(
     'CORS_ALLOWED_ORIGINS',
-    'http://localhost:5173'
+    'http://localhost:5173,http://localhost:3000'
 ).split(',')
 
 CORS_ALLOW_CREDENTIALS = True  # Necesario para sessions con cookies
@@ -155,7 +155,7 @@ CSRF_COOKIE_HTTPONLY = False  # Frontend necesita leerla
 CSRF_COOKIE_SAMESITE = 'Lax'
 CSRF_TRUSTED_ORIGINS = os.getenv(
     'CSRF_TRUSTED_ORIGINS',
-    'http://localhost:5173'
+    'http://localhost:5173,http://localhost:3000'
 ).split(',')
 
 # ===================================

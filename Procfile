@@ -1,1 +1,1 @@
-web: python manage.py migrate && python manage.py collectstatic --noinput --clear || echo "Static files skipped" && gunicorn config.wsgi:application --bind 0.0.0.0:$PORT --workers 1 --threads 1 --timeout 0 --access-logfile - --error-logfile - --log-level debug --capture-output --enable-stdio-inheritance
+web: gunicorn config.wsgi:application --bind 0.0.0.0:$PORT --log-level debug

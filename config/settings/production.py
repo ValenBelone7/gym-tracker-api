@@ -4,7 +4,12 @@ from .base import *
 
 # Debug
 DEBUG = False
-print("🚀 Production settings loaded")  # ← Para confirmar en logs
+
+# Secret Key
+SECRET_KEY = os.getenv(
+    'SECRET_KEY',
+    '***REMOVED***'  # Fallback si no está en variables
+)
 
 # Allowed Hosts
 ALLOWED_HOSTS = [
@@ -22,7 +27,7 @@ DATABASES = {
     )
 }
 
-# CORS (ya lo agregaste)
+# CORS
 INSTALLED_APPS += ['corsheaders']
 
 MIDDLEWARE = [
@@ -38,13 +43,36 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "https://gym-tracker-frontend.vercel.app",
-    "http://localhost:5173",
+    'https://gym-tracker-frontend.vercel.app',
+    'https://gym-tracker-frontend-git-main-valenbelone7s-projects.vercel.app',
+    'https://gym-tracker-frontend-30gyt6d80-valenbelone7s-projects.vercel.app',
+    'http://localhost:5173',
 ]
 
 CORS_ALLOW_CREDENTIALS = True
 
-# Static
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
+
+# Static Files
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATIC_URL = '/static/'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
@@ -53,9 +81,28 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 CSRF_TRUSTED_ORIGINS = [
     'https://gym-tracker-backend.up.railway.app',
     'https://gym-tracker-frontend.vercel.app',
+    'https://gym-tracker-frontend-git-main-valenbelone7s-projects.vercel.app',
+    'https://gym-tracker-frontend-30gyt6d80-valenbelone7s-projects.vercel.app',
 ]
 
 SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Logging para debug
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'INFO',
+    },
+}
+
+print("✅ Production settings loaded successfully")

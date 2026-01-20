@@ -33,9 +33,6 @@ COPY . .
 # Create staticfiles directory
 RUN mkdir -p staticfiles
 
-# Collect static files (don't use --noinput here, just prepare)
-RUN python manage.py collectstatic --noinput 2>/dev/null || true
-
 # Port exposure
 EXPOSE 8000
 

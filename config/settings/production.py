@@ -8,7 +8,9 @@ print("🚀 Loading production settings...")
 DEBUG = False
 
 # Secret Key
-SECRET_KEY = os.getenv('SECRET_KEY', '***REMOVED***')
+SECRET_KEY = os.getenv('SECRET_KEY')
+if not SECRET_KEY:
+    raise ValueError("SECRET_KEY environment variable is required")
 
 # Allowed Hosts
 ALLOWED_HOSTS = [

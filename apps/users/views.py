@@ -78,7 +78,7 @@ class LogoutView(APIView):
     
     Cerrar sesión y destruir cookie.
     """
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]  # ✅ Solo usuarios autenticados
     
     def post(self, request):
         logout(request)
@@ -113,7 +113,7 @@ class UpdateProfileView(generics.UpdateAPIView):
     Actualizar perfil del usuario actual.
     No permite cambiar username ni password (hay endpoints separados).
     """
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]  # ✅ Solo usuarios autenticados
     serializer_class = UserSerializer
     
     def get_object(self):
@@ -135,7 +135,7 @@ class ChangePasswordView(APIView):
     
     Cambiar contraseña del usuario actual.
     """
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]  # ✅ Solo usuarios autenticados
     
     def post(self, request):
         serializer = ChangePasswordSerializer(

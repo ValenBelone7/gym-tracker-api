@@ -10,14 +10,12 @@ DEBUG = False
 # Secret Key
 SECRET_KEY = os.getenv('SECRET_KEY')
 if not SECRET_KEY:
-    raise ValueError("SECRET_KEY environment variable is required")
+    raise ValueError("SECRET_KEY environment variable is required!")
 
 # Allowed Hosts
-ALLOWED_HOSTS = [
-    'gym-tracker-backend.up.railway.app',
-    '.railway.app',
-    'localhost',
-]
+allowed_hosts_str = os.getenv('ALLOWED_HOSTS', '')
+ALLOWED_HOSTS = [host.strip() for host in allowed_hosts_str.split(',') if host.strip()]
+print(f"✅ ALLOWED_HOSTS: {ALLOWED_HOSTS}")
 
 # Database
 database_url = os.getenv('DATABASE_URL')
@@ -53,12 +51,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CORS_ALLOWED_ORIGINS = [
-    'https://gym-tracker-frontend.vercel.app',
-    'https://gym-tracker-frontend-git-main-valenbelone7s-projects.vercel.app',
-    'https://gym-tracker-frontend-30gyt6d80-valenbelone7s-projects.vercel.app',
-    'http://localhost:5173',
-]
+# CORS Configuration
+cors_origins_str = os.getenv('CORS_ALLOWED_ORIGINS', '')
+CORS_ALLOWED_ORIGINS = [origin.strip() for origin in cors_origins_str.split(',') if origin.strip()]
+print(f"✅ CORS_ALLOWED_ORIGINS: {CORS_ALLOWED_ORIGINS}")
 
 CORS_ALLOW_CREDENTIALS = True
 
@@ -83,7 +79,7 @@ CORS_ALLOW_HEADERS = [
     'x-requested-with',
 ]
 
-# Static Files - Simplificado y robusto
+# Static Files
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
@@ -97,14 +93,12 @@ STORAGES = {
     },
 }
 
-# Security
-CSRF_TRUSTED_ORIGINS = [
-    'https://gym-tracker-backend.up.railway.app',
-    'https://gym-tracker-frontend.vercel.app',
-    'https://gym-tracker-frontend-git-main-valenbelone7s-projects.vercel.app',
-    'https://gym-tracker-frontend-30gyt6d80-valenbelone7s-projects.vercel.app',
-]
+# CSRF Configuration
+csrf_origins_str = os.getenv('CSRF_TRUSTED_ORIGINS', '')
+CSRF_TRUSTED_ORIGINS = [origin.strip() for origin in csrf_origins_str.split(',') if origin.strip()]
+print(f"✅ CSRF_TRUSTED_ORIGINS: {CSRF_TRUSTED_ORIGINS}")
 
+# Security
 SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True

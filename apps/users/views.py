@@ -5,6 +5,7 @@ Usamos APIView para auth porque no necesitamos CRUD completo.
 """
 
 from django.contrib.auth import login, logout
+from django.middleware.csrf import get_token
 from rest_framework import status, generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -46,7 +47,7 @@ class LoginView(APIView):
     POST /api/auth/login
     
     Login con username/password.
-    Crea una session con cookie.
+    Crea una session con cookie y devuelve CSRF token.
     """
     permission_classes = [AllowAny]
     serializer_class = LoginSerializer
@@ -61,9 +62,13 @@ class LoginView(APIView):
         user = serializer.validated_data['user']
         login(request, user)
         
+        # Obtener/generar el CSRF token
+        csrf_token = get_token(request)
+        
         return Response({
             'message': 'Login exitoso',
-            'user': UserSerializer(user).data
+            'user': UserSerializer(user).data,
+            'csrf_token': csrf_token
         }, status=status.HTTP_200_OK)
 
 
@@ -88,12 +93,17 @@ class CurrentUserView(APIView):
     
     Obtener usuario actual.
     Útil para verificar si hay sesión activa.
+    También devuelve el CSRF token.
     """
     permission_classes = [IsAuthenticated]
     
     def get(self, request):
-        serializer = UserSerializer(request.user)
-        return Response(serializer.data)
+        csrf_token = get_token(request)
+        
+        return Response({
+            'user': UserSerializer(request.user).data,
+            'csrf_token': csrf_token
+        })
 
 
 class UpdateProfileView(generics.UpdateAPIView):
@@ -138,3 +148,21 @@ class ChangePasswordView(APIView):
         return Response({
             'message': 'Contraseña cambiada exitosamente'
         }, status=status.HTTP_200_OK)
+
+
+class TestAuthView(APIView):
+    """
+    GET /api/auth/test/
+    
+    Endpoint de prueba para debug de autenticación.
+    Muestra estado de sesión, cookies y usuario actual.
+    """
+    permission_classes = [AllowAny]
+    
+    def get(self, request):
+        return Response({
+            'authenticated': request.user.is_authenticated,
+            'user': str(request.user),
+            'session_key': request.session.session_key,
+            'cookies': list(request.COOKIES.keys()),
+        })

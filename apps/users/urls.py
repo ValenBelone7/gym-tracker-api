@@ -10,6 +10,7 @@ from .views import (
     CurrentUserView,
     UpdateProfileView,
     ChangePasswordView,
+    TestAuthView,
 )
 
 app_name = 'users'
@@ -24,4 +25,7 @@ urlpatterns = [
     # Gestión de perfil
     path('auth/profile', UpdateProfileView.as_view(), name='update-profile'),
     path('auth/change-password', ChangePasswordView.as_view(), name='change-password'),
+    
+    # Test
+    path('auth/test/', TestAuthView.as_view(), name='test-auth'),
 ]

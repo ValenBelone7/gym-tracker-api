@@ -1,14 +1,17 @@
-/__pycache__/
-/*.py[cod]
-/*$py.class
+__pycache__/
+*.py[cod]
+*$py.class
 /.Python
-/db.sqlite3
-/db.sqlite3-journal
+db.sqlite3
+db.sqlite3-journal
+*.sql
+*.dump
 /media/
 /staticfiles/
 /.env
-.venv
+.venv/
 venv/
+node_modules/
 ENV/
 
 .vscode/
@@ -37,3 +40,7 @@ Thumbs.db
 .env
 .env.*
 !.env.example
+
+# Artefactos sueltos (cookie jar de curl)
+/-d
+cookies.txt
